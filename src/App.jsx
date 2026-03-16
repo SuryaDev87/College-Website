@@ -1,3 +1,4 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Stats from "./components/Stats";
@@ -6,21 +7,33 @@ import CampusLife from "./components/CampusLife";
 import Schools from "./components/Schools";
 import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
+import CSDepartment from './pages/CSDepartment';
 
 function App() {
   return (
-    <div className="bg-white dark:bg-[#020617] min-h-screen transition-colors duration-500">
-      <Header />
-      <section id="home"><Hero /></section>
-      <Stats />
-      <section id="schools"><Schools /></section>           
-      <Placements />
-      <CampusLife />
-      <Schools />
-      <Testimonials />
-      {/* Add your other components here */}
-      <section id="footer"><Footer /></section>
-    </div>
+    <Router>
+      <div className="bg-white dark:bg-[#020617] min-h-screen transition-colors duration-500">
+        <Header />
+        
+        <Routes>
+          {/* HOME PAGE ROUTE - Groups all your sections together */}
+          <Route path="/" element={
+            <>
+              <section id="home"><Hero /></section>
+              <Stats />
+              <section id="schools"><Schools /></section>           
+              <Placements />
+              <CampusLife />
+              <Testimonials />
+              <section id="footer"><Footer /></section>
+            </>
+          } />
+
+          {/* CS DEPARTMENT PAGE ROUTE - Separate Page */}
+          <Route path="/cs" element={<CSDepartment />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

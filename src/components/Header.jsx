@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; // Don't forget this!
 import logo from "../assets/logo.png";
 
 export default function Header() {
@@ -41,23 +42,34 @@ export default function Header() {
 
       {/* 2. MAIN NAVIGATION */}
       <div className="max-w-[1400px] mx-auto px-8 py-4 flex justify-between items-center">
-        <div className="flex items-center group cursor-pointer">
-          {/* FIXED LOGO: Inverts and brightens in Dark Mode */}
+        <Link to="/" className="flex items-center group cursor-pointer">
           <img 
             src={logo} 
             alt="ITM Logo" 
             className="h-16 w-auto object-contain transition-all duration-500 group-hover:scale-105 dark:invert dark:brightness-200"
           />
-        </div>
+        </Link>
 
         <nav className="hidden xl:flex items-center gap-10">
           <div className="flex items-center gap-8 text-[14px] font-black uppercase tracking-widest text-gray-800 dark:text-gray-200">
-            {['Home', 'Admission', 'Departments', 'TAP', 'Research'].map((link) => (
-              <a key={link} href={`#${link.toLowerCase()}`} className="relative group overflow-hidden py-2">
-                <span className="group-hover:text-blue-600 transition-colors">{link}</span>
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-              </a>
-            ))}
+            {['Home', 'Admission', 'Departments', 'TAP', 'Research'].map((item) => {
+              // FIX: If it's Departments, use <Link> to go to the new page
+              if (item === 'Departments') {
+                return (
+                  <Link key={item} to="/cs" className="relative group overflow-hidden py-2">
+                    <span className="group-hover:text-blue-600 transition-colors">{item}</span>
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                  </Link>
+                );
+              }
+              // Otherwise use standard anchor tags for home page scrolling
+              return (
+                <a key={item} href={item === 'Home' ? '/' : `#${item.toLowerCase()}`} className="relative group overflow-hidden py-2">
+                  <span className="group-hover:text-blue-600 transition-colors">{item}</span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+              );
+            })}
             
             <div className="relative group">
               <button className="flex items-center gap-2 hover:text-blue-600 cursor-pointer py-2 uppercase">
@@ -65,9 +77,9 @@ export default function Header() {
               </button>
               <div className="absolute top-full right-0 mt-2 w-72 bg-white/95 dark:bg-[#020617]/95 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[2rem] p-8 border border-white/20 dark:border-gray-800 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-500">
                 <div className="grid gap-5 text-[12px] font-black tracking-widest uppercase">
-                  {['Clubs/Cell', 'Alumni', 'Gallery', 'IEEE'].map(item => (
-                    <a key={item} href="#" className="flex justify-between items-center group/item hover:text-blue-600">
-                      {item} <span className="opacity-0 group-hover/item:opacity-100 translate-x-[-10px] group-hover/item:translate-x-0 transition-all">→</span>
+                  {['Clubs/Cell', 'Alumni', 'Gallery', 'IEEE'].map(subItem => (
+                    <a key={subItem} href="#" className="flex justify-between items-center group/item hover:text-blue-600">
+                      {subItem} <span className="opacity-0 group-hover/item:opacity-100 translate-x-[-10px] group-hover/item:translate-x-0 transition-all">→</span>
                     </a>
                   ))}
                   <div className="h-[1px] bg-gray-100 dark:bg-gray-800 my-2"></div>
@@ -80,7 +92,6 @@ export default function Header() {
 
           <div className="h-8 w-[1px] bg-gray-200 dark:bg-gray-800/50 mx-2"></div>
 
-          {/* PROFESSIONAL THEME TOGGLE */}
           <button 
             onClick={() => setDarkMode(!darkMode)} 
             className="relative w-14 h-7 flex items-center bg-gray-200 dark:bg-blue-900/40 rounded-full p-1 cursor-pointer transition-colors duration-300 border border-gray-300 dark:border-blue-700/50"
