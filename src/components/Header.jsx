@@ -4,7 +4,6 @@ import logo from "../assets/logo.png";
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMoreOpen, setIsMoreOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -30,7 +29,6 @@ export default function Header() {
             <a href="#" className="hover:text-cyan-400 transition-colors">Online Payment</a>
             <div className="h-3 w-[1px] bg-white/20"></div>
             
-            {/* HIGHLIGHTED PORTALS */}
             <a href="https://lms.itmgoi.in/" target="_blank" className="relative px-4 py-1 bg-cyan-500/20 border border-cyan-400/50 rounded-full text-cyan-400 hover:bg-cyan-500 hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
               LMS Portal
             </a>
@@ -42,18 +40,14 @@ export default function Header() {
       </div>
 
       {/* 2. MAIN NAVIGATION */}
-      <div className="max-w-[1400px] mx-auto px-8 py-5 flex justify-between items-center">
-        <div className="flex items-center gap-5 group cursor-pointer">
-           <div className="relative">
-             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000"></div>
-             <img src={logo} alt="ITM" className="relative h-14 w-14 object-contain bg-white rounded-full p-1.5 shadow-xl"/>
-           </div>
-           <div className={`flex flex-col leading-none ${isScrolled || darkMode ? "text-current" : "text-[#0b2a4a]"}`}>
-             <span className="font-black text-4xl tracking-tighter uppercase italic bg-clip-text text-transparent bg-gradient-to-r from-[#0b2a4a] to-blue-600 dark:from-white dark:to-blue-400">
-               ITM GOI
-             </span>
-             <span className="text-[10px] font-black text-blue-500 tracking-[0.4em] mt-1 uppercase">Gwalior • Excellence</span>
-           </div>
+      <div className="max-w-[1400px] mx-auto px-8 py-4 flex justify-between items-center">
+        <div className="flex items-center group cursor-pointer">
+          {/* FIXED LOGO: Inverts and brightens in Dark Mode */}
+          <img 
+            src={logo} 
+            alt="ITM Logo" 
+            className="h-16 w-auto object-contain transition-all duration-500 group-hover:scale-105 dark:invert dark:brightness-200"
+          />
         </div>
 
         <nav className="hidden xl:flex items-center gap-10">
@@ -65,14 +59,12 @@ export default function Header() {
               </a>
             ))}
             
-            {/* STYLISH MORE DROPDOWN */}
             <div className="relative group">
-              <button className="flex items-center gap-2 hover:text-blue-600 cursor-pointer py-2">
+              <button className="flex items-center gap-2 hover:text-blue-600 cursor-pointer py-2 uppercase">
                 MORE <span className="text-[10px] transition-transform group-hover:rotate-180">▼</span>
               </button>
-
               <div className="absolute top-full right-0 mt-2 w-72 bg-white/95 dark:bg-[#020617]/95 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[2rem] p-8 border border-white/20 dark:border-gray-800 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-500">
-                <div className="grid gap-5 text-[12px] font-black tracking-widest">
+                <div className="grid gap-5 text-[12px] font-black tracking-widest uppercase">
                   {['Clubs/Cell', 'Alumni', 'Gallery', 'IEEE'].map(item => (
                     <a key={item} href="#" className="flex justify-between items-center group/item hover:text-blue-600">
                       {item} <span className="opacity-0 group-hover/item:opacity-100 translate-x-[-10px] group-hover/item:translate-x-0 transition-all">→</span>
@@ -88,8 +80,18 @@ export default function Header() {
 
           <div className="h-8 w-[1px] bg-gray-200 dark:bg-gray-800/50 mx-2"></div>
 
-          <button onClick={() => setDarkMode(!darkMode)} className="cursor-pointer text-2xl hover:scale-125 transition-transform">
-            {darkMode ? "✨" : "🌙"}
+          {/* PROFESSIONAL THEME TOGGLE */}
+          <button 
+            onClick={() => setDarkMode(!darkMode)} 
+            className="relative w-14 h-7 flex items-center bg-gray-200 dark:bg-blue-900/40 rounded-full p-1 cursor-pointer transition-colors duration-300 border border-gray-300 dark:border-blue-700/50"
+          >
+            <div className={`absolute w-5 h-5 bg-white dark:bg-blue-400 rounded-full shadow-md transform transition-transform duration-300 flex items-center justify-center ${darkMode ? 'translate-x-7' : 'translate-x-0'}`}>
+              {darkMode ? (
+                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-blue-900"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-amber-500"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+              )}
+            </div>
           </button>
           
           <button className="relative group">
