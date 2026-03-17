@@ -4,7 +4,7 @@ import Hero from "./components/Hero";
 import Stats from "./components/Stats";
 import Placements from "./components/Placements";
 import CampusLife from "./components/CampusLife";
-import Schools from "./components/Schools";
+import Departments from "./components/Departments";
 import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
 import CSDepartment from './pages/CSDepartment';
@@ -25,7 +25,7 @@ function App() {
             <>
               <section id="home"><Hero /></section>
               <Stats />
-              <section id="schools"><Schools /></section>           
+              <section id="schools"><Departments /></section>           
               <Placements />
               <CampusLife />
               <Testimonials />
