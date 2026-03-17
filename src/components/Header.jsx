@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Don't forget this!
+import { Link } from "react-router-dom"; 
+import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/logo.png";
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null); // Added for the glass effect
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -17,7 +19,7 @@ export default function Header() {
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? "bg-white/80 dark:bg-[#020617]/80 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]" : "bg-transparent"}`}>
       
-      {/* 1. NEON UTILITY BAR */}
+      {/* 1. NEON UTILITY BAR (STAYS EXACTLY THE SAME) */}
       <div className="hidden md:block bg-gradient-to-r from-[#0b2a4a] via-[#1e40af] to-[#0b2a4a] dark:from-black dark:via-[#111827] dark:to-black text-[12px] text-white/90 py-2 border-b border-white/10">
         <div className="max-w-[1400px] mx-auto px-8 flex justify-between items-center font-bold tracking-tight">
           <div className="flex gap-8 opacity-80">
@@ -40,7 +42,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* 2. MAIN NAVIGATION */}
+      {/* 2. MAIN NAVIGATION (ONLY THE HOVER LOGIC UPDATED) */}
       <div className="max-w-[1400px] mx-auto px-8 py-4 flex justify-between items-center">
         <Link to="/" className="flex items-center group cursor-pointer">
           <img 
@@ -51,30 +53,49 @@ export default function Header() {
         </Link>
 
         <nav className="hidden xl:flex items-center gap-10">
-          <div className="flex items-center gap-8 text-[14px] font-black uppercase tracking-widest text-gray-800 dark:text-gray-200">
-            {['Home', 'Admission', 'Departments', 'TAP', 'Research'].map((item) => {
-              // FIX: If it's Departments, use <Link> to go to the new page
-              if (item === 'Departments') {
-                return (
-                  <Link key={item} to="/cs" className="relative group overflow-hidden py-2">
-                    <span className="group-hover:text-blue-600 transition-colors">{item}</span>
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-                  </Link>
-                );
-              }
-              // Otherwise use standard anchor tags for home page scrolling
-              return (
-                <a key={item} href={item === 'Home' ? '/' : `#${item.toLowerCase()}`} className="relative group overflow-hidden py-2">
-                  <span className="group-hover:text-blue-600 transition-colors">{item}</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-                </a>
-              );
-            })}
+          <div 
+            className="flex items-center gap-2 text-[14px] font-black uppercase tracking-widest text-gray-800 dark:text-gray-200 relative"
+            onMouseLeave={() => setHoveredItem(null)} // Reset when mouse leaves nav
+          >
+            {['Home', 'Admission', 'Departments', 'TAP', 'Research'].map((item) => (
+              <Link
+                key={item}
+                to={item === 'Departments' ? '/cs' : '/'}
+                onMouseEnter={() => setHoveredItem(item)}
+                className="relative px-5 py-2 transition-colors duration-300 z-10 hover:text-blue-600"
+              >
+                {/* THE IPHONE-STYLE GLASS PILL */}
+                {hoveredItem === item && (
+                  <motion.span
+                    layoutId="navbar-pill"
+                    className="absolute inset-0 z-0 bg-gray-200/50 dark:bg-white/10 backdrop-blur-lg rounded-full border border-gray-300/50 dark:border-white/10 shadow-sm"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{item}</span>
+              </Link>
+            ))}
             
+            {/* MORE DROPDOWN WITH GLASS HOVER */}
             <div className="relative group">
-              <button className="flex items-center gap-2 hover:text-blue-600 cursor-pointer py-2 uppercase">
-                MORE <span className="text-[10px] transition-transform group-hover:rotate-180">▼</span>
+              <button 
+                onMouseEnter={() => setHoveredItem('more')}
+                className="relative flex items-center gap-2 px-5 py-2 hover:text-blue-600 cursor-pointer uppercase z-10"
+              >
+                {hoveredItem === 'more' && (
+                  <motion.span
+                    layoutId="navbar-pill"
+                    className="absolute inset-0 z-0 bg-gray-200/50 dark:bg-white/10 backdrop-blur-lg rounded-full border border-gray-300/50 dark:border-white/10"
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2">
+                    MORE <span className="text-[10px] transition-transform group-hover:rotate-180">▼</span>
+                </span>
               </button>
+              
               <div className="absolute top-full right-0 mt-2 w-72 bg-white/95 dark:bg-[#020617]/95 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[2rem] p-8 border border-white/20 dark:border-gray-800 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-500">
                 <div className="grid gap-5 text-[12px] font-black tracking-widest uppercase">
                   {['Clubs/Cell', 'Alumni', 'Gallery', 'IEEE'].map(subItem => (

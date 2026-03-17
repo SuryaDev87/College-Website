@@ -11,7 +11,7 @@ export default function Schools() {
     <section className="py-24 bg-gray-50 dark:bg-[#020617] transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-16">
-          <h2 className="text-3xl font-black text-itm-blue dark:text-white uppercase">Explore Schools</h2>
+          <h2 className="text-3xl font-black text-itm-blue dark:text-white uppercase">Explore Departments</h2>
           <div className="w-16 h-1 bg-yellow-500 mt-2"></div>
         </div>
 

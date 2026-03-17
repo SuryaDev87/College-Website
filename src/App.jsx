@@ -8,6 +8,7 @@ import Schools from "./components/Schools";
 import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
 import CSDepartment from './pages/CSDepartment';
+import FloatingSidebar from "./components/FloatingSidebar";
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
       <div className="bg-white dark:bg-[#020617] min-h-screen transition-colors duration-500">
         <Header />
         
+        {/* Persistent Floating Sidebar */}
+        <FloatingSidebar /> 
+
         <Routes>
           {/* HOME PAGE ROUTE - Groups all your sections together */}
           <Route path="/" element={
