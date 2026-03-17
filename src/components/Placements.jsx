@@ -1,89 +1,98 @@
-import { useEffect, useRef } from "react";
-import { motion, useMotionValue, useTransform, animate, useInView } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
+import Reveal from "./Reveal";
 
-function Counter({ value, suffix = "" }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
-
-  useEffect(() => {
-    if (isInView) {
-      const controls = animate(count, parseInt(value), {
-        duration: 2,
-        ease: "easeOut",
-      });
-      return controls.stop;
-    }
-  }, [isInView, value, count]);
-
-  return (
-    <span ref={ref}>
-      <motion.span>{rounded}</motion.span>
-      {suffix}
-    </span>
-  );
-}
+const companies = [
+  "Google", "Microsoft", "Amazon", "TCS", "Infosys", 
+  "Wipro", "Accenture", "Adobe", "IBM", "Oracle"
+];
 
 export default function Placements() {
-  const companies = ["Google", "Microsoft", "Amazon", "TCS", "Infosys", "Wipro", "Cognizant", "Adobe", "Meta"];
-
   return (
-    <section className="py-20 bg-white dark:bg-[#020617] transition-colors overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 text-center">
-        <p className="text-blue-600 font-bold text-xs tracking-[0.3em] uppercase mb-4">Our Top Recruiters</p>
-        <h2 className="text-4xl font-black text-[#0b2a4a] dark:text-white mb-12">
-          Dream Companies. <span className="text-blue-500">Global Careers.</span>
-        </h2>
+    <section className="py-16 bg-white dark:bg-[#020617] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* Header - More Compact */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+          <div>
+            <Reveal>
+              <span className="text-blue-600 font-black uppercase tracking-[0.3em] text-[10px]">
+                Career Outcomes
+              </span>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <h2 className="text-3xl md:text-5xl font-black text-[#0b2a4a] dark:text-white mt-2 tracking-tighter">
+                Our <span className="text-blue-600">Alumni</span> Network
+              </h2>
+            </Reveal>
+          </div>
+          
+          {/* Static Mini-Label for Marquee */}
+          <Reveal delay={0.3}>
+            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest pb-2">
+              Top Recruiters —
+            </p>
+          </Reveal>
+        </div>
 
-        {/* Improved Marquee Effect */}
-        <div className="relative flex overflow-x-hidden py-4">
+        {/* --- COMPACT MARQUEE --- */}
+        <div className="relative flex overflow-hidden py-6 border-y border-gray-100 dark:border-white/5 mb-16">
           <motion.div 
-            className="flex whitespace-nowrap gap-12"
             animate={{ x: ["0%", "-50%"] }}
             transition={{ 
-              repeat: Infinity, 
               ease: "linear", 
-              duration: 20 
+              duration: 25, 
+              repeat: Infinity 
             }}
+            className="flex whitespace-nowrap gap-12 items-center"
           >
-            {/* We duplicate the array to ensure the loop is seamless */}
-            {[...companies, ...companies].map((company, index) => (
+            {[...companies, ...companies].map((company, i) => (
               <span 
-                key={index} 
-                className="text-2xl font-bold tracking-tight text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-default px-4"
+                key={i} 
+                className="text-xl md:text-2xl font-black tracking-tight uppercase
+                           text-[#0b2a4a] dark:text-white opacity-60 hover:opacity-100
+                           transition-opacity cursor-default"
               >
                 {company}
               </span>
             ))}
           </motion.div>
-
-          {/* Gradient Overlays for better visibility/blending on edges */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white dark:from-[#020617] to-transparent"></div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white dark:from-[#020617] to-transparent"></div>
+          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white dark:from-[#020617] to-transparent z-10"></div>
+          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white dark:from-[#020617] to-transparent z-10"></div>
         </div>
 
-        <div className="mt-20 grid md:grid-cols-3 gap-8">
-          <div className="p-8 rounded-3xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800">
-            <h4 className="text-4xl font-black text-blue-600">
-              <Counter value="45" suffix=" LPA" />
-            </h4>
-            <p className="text-sm font-bold text-gray-500 mt-2 uppercase tracking-wide">Highest Package</p>
-          </div>
+        {/* --- SIDE-BY-SIDE STATS --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Reveal delay={0.2}>
+            <motion.div 
+              whileHover={{ y: -5 }}
+              className="p-8 rounded-[2rem] bg-blue-600 text-white shadow-xl relative overflow-hidden"
+            >
+              <div className="relative z-10">
+                <p className="text-[10px] uppercase font-black tracking-widest opacity-70 mb-2">Highest Package</p>
+                <div className="text-5xl font-black">45.0 <span className="text-xl">LPA</span></div>
+              </div>
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+            </motion.div>
+          </Reveal>
 
-          <div className="p-8 rounded-3xl bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-100 dark:border-yellow-800">
-            <h4 className="text-4xl font-black text-yellow-600">
-              <Counter value="90" suffix="%" />
-            </h4>
-            <p className="text-sm font-bold text-gray-500 mt-2 uppercase tracking-wide">Placement Record</p>
-          </div>
-
-          <div className="p-8 rounded-3xl bg-green-50 dark:bg-green-900/10 border border-green-100 dark:border-green-800">
-            <h4 className="text-4xl font-black text-green-600">
-              <Counter value="500" suffix="+" />
-            </h4>
-            <p className="text-sm font-bold text-gray-500 mt-2 uppercase tracking-wide">Hiring Partners</p>
-          </div>
+          <Reveal delay={0.4}>
+            <motion.div 
+              whileHover={{ y: -5 }}
+              className="p-8 rounded-[2rem] bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10"
+            >
+              <p className="text-[10px] uppercase font-black tracking-widest text-blue-600 mb-2">Placement Rate</p>
+              <div className="text-5xl font-black text-[#0b2a4a] dark:text-white">92%</div>
+              <div className="mt-4 h-1.5 w-full bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
+                <motion.div 
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "92%" }}
+                  transition={{ duration: 1.5 }}
+                  className="h-full bg-blue-600"
+                />
+              </div>
+            </motion.div>
+          </Reveal>
         </div>
       </div>
     </section>
